@@ -46,7 +46,7 @@ If someone is able to guess the URL to the Playwright server and connect to it, 
 
 This would be problematic if the server was directly exposed to the internet, but it's only accessible via either the SSH or RDP connections, both of which are password-protected.
 
-So it's risk of compromise is equivalent to the risk of compromise of the Window user's password.
+So its risk of compromise is equivalent to the risk of compromise of the Window user's password.
 
 And publicizing its URL (as is done via the source code in this repository) doesn't change this risk profile.
 
@@ -56,7 +56,7 @@ The at-driver server does no authentication on connection requests from clients.
 
 This would be problematic if the server was directly exposed to the internet, but it's only accessible via either the SSH or RDP connections, both of which are password-protected.
 
-So it's risk of compromise is equivalent to the risk of compromise of the Window user's password.
+So its risk of compromise is equivalent to the risk of compromise of the Window user's password.
 
 ### Password Compromise
 
