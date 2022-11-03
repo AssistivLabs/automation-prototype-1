@@ -38,7 +38,9 @@ In the absence of TLS, it should default to using a symmetric encryption scheme 
 
 The remote machines are currently stock Windows Server 2019 instances, so as long as a user doesn't connect with an unmaintained RDP client the encryption should not be extremely weak.
 
-### Playwright Server Compromise
+### Websocket Servers
+
+#### Playwright Server Compromise
 
 If someone is able to guess the URL to the Playwright server and connect to it, they can gain the same privileges as the logged-in Windows user (per [this Playwright doc](https://playwright.dev/docs/api/class-browsertype#browser-type-launch-server-option-ws-path)).
 
@@ -47,6 +49,14 @@ This would be problematic if the server was directly exposed to the internet, bu
 So it's risk of compromise is equivalent to the risk of compromise of the Window user's password.
 
 And publicizing its URL (as is done via the source code in this repository) doesn't change this risk profile.
+
+#### At-Driver Server Compromise
+
+The at-driver server does no authentication on connection requests from clients. So a malicious actor could in theory connect and start to control the remote machine by sending arbitrary keypress commands.
+
+This would be problematic if the server was directly exposed to the internet, but it's only accessible via either the SSH or RDP connections, both of which are password-protected.
+
+So it's risk of compromise is equivalent to the risk of compromise of the Window user's password.
 
 ### Password Compromise
 
