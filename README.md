@@ -38,37 +38,18 @@ You should now be connected to a Windows computer via the app.
 
 For [security reasons](./security.md#websockets) the ports to the 2 websocket servers on the remote machine can't be directly connected to.
 
-Instead, their connections have to be wrapped by an SSH connection.
-
-### Forwarding to the Playwright Server's Port
-
-To setup the Playwright websocket server's wrapped connection, follow these steps:
+Instead, their connections have to be wrapped by an SSH connection as follows
 
 1. Copy the following command to a text file and substitute in the username and hostname you received for `username` and `hostname` respectively.
 
 ```bash
-ssh -L 127.0.0.1:4284:127.0.0.1:4284 -N username@hostname -v
+ssh -L 127.0.0.1:4284:127.0.0.1:4284 -L 127.0.0.1:4382:127.0.0.1:4382 -N username@hostname -v
 ```
 
 2. Open a new terminal and copy-paste the edited command into it and press Enter.
 3. When prompted for a password, input the password you received and press Enter.
 
-If successful, the logs should include the line `Local connections to 127.0.0.1:4284 forwarded to remote address 127.0.0.1:4284`
-
-### Forwarding to the At-Driver Server's Port
-
-To setup the at-driver websocket server's wrapped connection, follow these steps:
-
-1. Copy the following command to a text file and substitute in the username and hostname you received for `username` and `hostname` respectively.
-
-```bash
-ssh -L 127.0.0.1:4382:127.0.0.1:4382 -N username@hostname -v
-```
-
-2. Open a new terminal and copy-paste the edited command into it and press Enter.
-3. When prompted for a password, input the password you received and press Enter.
-
-If successful, the logs should include the line `Local connections to 127.0.0.1:4382 forwarded to remote address 127.0.0.1:4382`
+If successful, the logs should include the lines `Local connections to 127.0.0.1:4284 forwarded to remote address 127.0.0.1:4284` and `Local connections to 127.0.0.1:4382 forwarded to remote address 127.0.0.1:4382`.
 
 ## Running the Automation
 
