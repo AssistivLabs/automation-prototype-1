@@ -1,0 +1,31 @@
+{
+  "name": "automation-prototype-1",
+  "version": "1.0.0",
+  "description": "Just enough initial basics so that other folks can try it out themselves",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --build",
+    "test": "node index.js",
+    "all": "npm run build && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sadikassistivlabs/prototyping-starting-point.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sadikassistivlabs/prototyping-starting-point/issues"
+  },
+  "homepage": "https://github.com/sadikassistivlabs/prototyping-starting-point#readme",
+  "dependencies": {
+    "playwright": "^1.27.1",
+    "ws": "^8.10.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.3",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.4"
+  }
+}
