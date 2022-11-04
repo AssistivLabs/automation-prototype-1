@@ -75,4 +75,22 @@ In your local terminal, you should see logs showing the speech NVDA is generatin
 
 > You likely will need to click or otherwise manually activate the page the first time the automation is run so NVDA knows to start there. After that it remembers.
 
-Use `Command+C` (or `Ctrl+C`) in the terminal to terminate the automation script.
+## Running Against Localhost on Your Local Machine
+
+To enable accessing a web server on your local machine from the remote machine, follow these steps:
+
+1. Update any references to `page.goto` in this repo to point at `http://localhost:port` or `https://localhost:port` (whichever you're using) with `port` replaced by the port number the web server is listening on
+2. Copy the following command to a text file and substitute in the username and hostname you received for `username` and `hostname` respectively, as well as `port` with the port number the web server is listening on
+
+```bash
+ssh -R port:127.0.0.1:port -N username@hostname -v
+```
+
+3. Open a new terminal and copy-paste the edited command into it and press Enter.
+4. When prompted for a password, input the password you received and press Enter.
+
+If successful, the logs should include the line `Remote connections from LOCALHOST:port forwarded to local address 127.0.0.1:port`, with `port` replaced by the port number the web server is listening on.
+
+## Terminating Connections
+
+Use `Command+C` (or `Ctrl+C`) in any of the terminals to terminate either the websocket connections (from the automation script) or an SSH connection.
