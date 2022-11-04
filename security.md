@@ -16,6 +16,8 @@ Inside of the remote machine are 2 websocket servers listening on 2 non-public p
 
 These ports are accessed via SSH local port forwarding from the user's local machine.
 
+Optionally, a user can also SSH remote port forward a local web server to the remote machine so that it can be accessed from there.
+
 ## Aspects and Scenarios
 
 ### Encryption in Transit
@@ -38,6 +40,10 @@ In the absence of TLS, it should default to using a symmetric encryption scheme 
 
 The remote machines are currently stock Windows Server 2019 instances, so as long as a user doesn't connect with an unmaintained RDP client the encryption should not be extremely weak.
 
+#### Remote Port Forwarded Localhost
+
+Regardless of if the user's local web server is running over HTTP or HTTPS (e.g. with a self-signed certificate), the SSH remote port forwarding connection will wrap it, providing encryption in transit (see above discussion on the websocket connections).
+
 ### Websocket Servers
 
 #### Playwright Server Compromise
@@ -57,6 +63,16 @@ The at-driver server does no authentication on connection requests from clients.
 This would be problematic if the server was directly exposed to the internet, but it's only accessible via either the SSH or RDP connections, both of which are password-protected.
 
 So its risk of compromise is equivalent to the risk of compromise of the Window user's password.
+
+### HTTP Server
+
+#### Localhost Compromise
+
+If a user tunnels a local web server to the remote machine, and the remote machine is compromised, a malicious actor could make arbitrary requests to the web server.
+
+If the web server had certain vulnerabilities, the compromise could escalate to the user's local machine, and potentially further on from there.
+
+Running the web server in a tighter sandbox (e.g. a Docker container) could potentially mitigate this.
 
 ### Password Compromise
 
