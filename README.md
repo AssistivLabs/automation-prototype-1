@@ -82,7 +82,7 @@ In your local terminal, you should see logs showing the speech NVDA is generatin
 
 To enable accessing a web server on your local machine from the remote machine, follow these steps:
 
-1. Update any references to `page.goto` in this repo to point at `http://127.0.0.1:port` or `https://127.0.0.1:port` (depending on if you're web server is using HTTP or HTTPS) with `port` replaced by the port number the web server is listening on
+1. Update any references to `page.goto` in this repo to point at `http://127.0.0.1:port` or `https://127.0.0.1:port` (depending on if your web server is using HTTP or HTTPS) with `port` replaced by the port number the web server is listening on
 2. Copy the following commands to a text file and fill in the username and hostname variables with the values you received for `username` and `hostname` respectively, as well as `port` with the port number the web server is listening on
 
 ```bash
