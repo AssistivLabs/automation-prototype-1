@@ -10,9 +10,9 @@ const {
 } = createAbstractions();
 
 const browser = await chromium.connect(
-  "ws://localhost:4284/unguessable-string" // See the security.md file for why this is fine though it seems strange on the face
+  "ws://127.0.0.1:4284/unguessable-string" // See the security.md file for why this is fine though it seems strange on the face
 );
-await connectToAriaAtDriverWebsocket({ wsUrl: "ws://localhost:4382" });
+await connectToAriaAtDriverWebsocket({ wsUrl: "ws://127.0.0.1:4382" });
 
 const browserContext = await browser.newContext();
 const page = await browserContext.newPage();
