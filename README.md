@@ -40,13 +40,16 @@ For [security reasons](./security.md#websockets) the ports to the 2 websocket se
 
 Instead, their connections have to be wrapped by an SSH connection as follows
 
-1. Copy the following command to a text file and substitute in the username and hostname you received for `username` and `hostname` respectively.
+1. Copy the following commands to a text file and fill in the username and hostname variables with the values you received for `username` and `hostname`, respectively.
 
 ```bash
-ssh -L 127.0.0.1:4284:127.0.0.1:4284 -L 127.0.0.1:4382:127.0.0.1:4382 -N username@hostname -v
+username=
+hostname=
+
+ssh -L 127.0.0.1:4284:127.0.0.1:4284 -L 127.0.0.1:4382:127.0.0.1:4382 -N $username@$hostname -v
 ```
 
-2. Open a new terminal and copy-paste the edited command into it and press Enter.
+2. Open a new terminal and copy-paste the edited commands into it and press Enter.
 3. When prompted for a password, input the password you received and press Enter.
 
 If successful, the logs should include the lines `Local connections to 127.0.0.1:4284 forwarded to remote address 127.0.0.1:4284` and `Local connections to 127.0.0.1:4382 forwarded to remote address 127.0.0.1:4382`.
@@ -80,15 +83,18 @@ In your local terminal, you should see logs showing the speech NVDA is generatin
 To enable accessing a web server on your local machine from the remote machine, follow these steps:
 
 1. Update any references to `page.goto` in this repo to point at `http://127.0.0.1:port` or `https://127.0.0.1:port` (depending on if you're web server is using HTTP or HTTPS) with `port` replaced by the port number the web server is listening on
-2. Copy the following command to a text file and substitute in the username and hostname you received for `username` and `hostname` respectively, as well as `port` with the port number the web server is listening on
+2. Copy the following commands to a text file and fill in the username and hostname variables with the values you received for `username` and `hostname` respectively, as well as `port` with the port number the web server is listening on
 
 ```bash
-ssh -R port:127.0.0.1:port -N username@hostname -v
+username=
+hostname=
+
+ssh -R port:127.0.0.1:port -N $username@$hostname -v
 ```
 
-The first port is the port your web server is listening to on your local machine. The second port is the port it will be accessed from on the remote machine.
+The first port in the command is the port your web server is listening to on your local machine. The second port is the port it will be accessed from on the remote machine.
 
-3. Open a new terminal and copy-paste the edited command into it and press Enter.
+3. Open a new terminal and copy-paste the edited commands into it and press Enter.
 4. When prompted for a password, input the password you received and press Enter.
 
 If successful, the logs should include the line `Remote connections from LOCALHOST:port forwarded to local address 127.0.0.1:port`, with `port` replaced by the port number the web server is listening on.
