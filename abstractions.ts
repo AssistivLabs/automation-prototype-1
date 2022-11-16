@@ -120,6 +120,7 @@ type Key = Char | Separator | NonLetterOrDigitKey;
 
 function createAbstractions() {
   let ariaAtDriverWs: WebSocket | undefined;
+  let speechStream: SpeechStream = new SpeechStream();
 
   /**
    * Pauses the "async thread" for a specified length of time
@@ -157,13 +158,63 @@ function createAbstractions() {
         return;
       }
 
-      console.info(`${new Date().toISOString()} [speech] ${messageObj.data}`);
+      speechStream.insert(messageObj.data);
+    });
+
+    speechStream.registerCallback((speech: string) => {
+      console.info(`${new Date().toISOString()} [speech] ${speech}`);
     });
 
     return new Promise<void>((resolve) => {
       ariaAtDriverWs!.on("open", function open() {
         resolve();
       });
+    });
+  }
+
+  /**
+   * Wait for certain phrases to show up in the speech output before continuing (order of inputs doesn't matter)
+   * @param phrasesToDetect The phrases to look for in the speech output
+   * @returns a Promise, that rejects if it can't find all of the phrases within the timeout duration, or resolves otherwise
+   */
+  async function waitForSpeechToInclude(
+    ...phrasesToDetect: string[]
+  ): Promise<void> {
+    const DEFAULT_TIMEOUT_IN_SECONDS = 60;
+    let callbackId: string;
+
+    return new Promise<void>((resolve, reject) => {
+      const idOfSetTimeout = setTimeout(() => {
+        reject(
+          `Unable to detect ${phrasesToDetect} in speech within ${DEFAULT_TIMEOUT_IN_SECONDS} seconds`
+        );
+      }, DEFAULT_TIMEOUT_IN_SECONDS * 1000);
+
+      const setOfPhrasesLeftToDetect = new Set(phrasesToDetect);
+
+      callbackId = speechStream.registerCallback((speech: string) => {
+        const setOfIdentifiedPhrases = new Set<string>();
+
+        for (const phrase of setOfPhrasesLeftToDetect) {
+          if (speech.includes(phrase)) {
+            setOfIdentifiedPhrases.add(phrase);
+          }
+        }
+
+        for (const identifiedPhrase of setOfIdentifiedPhrases) {
+          setOfPhrasesLeftToDetect.delete(identifiedPhrase);
+        }
+
+        if (setOfPhrasesLeftToDetect.size === 0) {
+          clearTimeout(idOfSetTimeout);
+
+          // console.debug(`${phrasesToDetect} all found in speech`); //TODO - move this behind a flag of some form
+
+          resolve();
+        }
+      });
+    }).finally(() => {
+      speechStream.unregisterCallback(callbackId);
     });
   }
 
@@ -227,11 +278,40 @@ function createAbstractions() {
   return {
     sleep,
     connectToAriaAtDriverWebsocket,
+    waitForSpeechToInclude,
     // typeSeveralCharactersInQuickSuccession,
     pressAndReleaseKey,
     pressKey,
     releaseKey,
   };
+}
+
+class SpeechStream {
+  #speech: string[] = [];
+  #insertionCallbacks: Map<string, (speech: string) => void> = new Map();
+
+  insert(speech: string) {
+    this.#speech.unshift(speech);
+
+    for (const callback of this.#insertionCallbacks.values()) {
+      try {
+        callback(speech);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
+  registerCallback(callback: (speech: string) => void): string {
+    const key = String(Date.now()); //TODO - replace with something better
+    this.#insertionCallbacks.set(key, callback);
+
+    return key;
+  }
+
+  unregisterCallback(key: string): void {
+    this.#insertionCallbacks.delete(key);
+  }
 }
 
 export { createAbstractions };
